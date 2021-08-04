@@ -1,12 +1,12 @@
 [submodule "LearnOpenGLAAA/OpenGL-Core/vendor/glfw"]
 	path = LearnOpenGLAAA/OpenGL-Core/vendor/glfw
-	url = https://github.com.cnpmjs.org/KirkXu/glfw.git
+	url = https://github.com/KirkXu/glfw
 [submodule "LearnOpenGLAAA/OpenGL-Core/vendor/glm"]
 	path = LearnOpenGLAAA/OpenGL-Core/vendor/glm
-	url = https://github.com.cnpmjs.org/g-truc/glm.git
+	url = https://github.com/g-truc/glm
 [submodule "LearnOpenGLAAA/OpenGL-Core/vendor/imgui"]
 	path = LearnOpenGLAAA/OpenGL-Core/vendor/imgui
-	url = https://github.com.cnpmjs.org/KirkXu/imgui.git
+	url = url = https://github.com/KirkXu/imgui
 [submodule "LearnOpenGLAAA/OpenGL-Core/vendor/spdlog"]
 	path = LearnOpenGLAAA/OpenGL-Core/vendor/spdlog
-	url = https://github.com.cnpmjs.org/gabime/spdlog.git
+	url = https://github.com/gabime/spdlog
