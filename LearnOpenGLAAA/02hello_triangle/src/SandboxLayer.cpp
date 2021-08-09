@@ -23,51 +23,41 @@ void SandboxLayer::OnAttach()
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
-	float vertices[] = {
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f,   // top left 
-		 0.0f, -1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
+	float triangle01[] = {
+		-0.5f, 0.5f, 0.0f,
+		 0.0f, 0.0f, 0.0f,
+		 0.5f, 0.5f, 0.0f
 	};
-	unsigned int indices[] = {  // note that we start from 0!
-		0, 1, 3,  // first Triangle
-		1, 2, 3,  // second Triangle
-		1, 5, 4,  // third Triangle
-		4, 6, 2   // fourth Triangle
+	float triangle02[] = {
+		 0.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f
 	};
 
-	glGenVertexArrays(1, &m_VAO);
-	glGenBuffers(1, &m_VBO);
-	glGenBuffers(1, &m_IBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(m_VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glGenVertexArrays(2, m_VAO);
+	glGenBuffers(2, m_VBO);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
+	// triangle01 setup
+	glBindVertexArray(m_VAO[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle01), triangle01, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-	glBindVertexArray(0);
+	// triangle02 setup
+	glBindVertexArray(m_VAO[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle02), triangle02, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 }
 
 void SandboxLayer::OnDetach()
 {
 	// Shutdown here
-	glDeleteVertexArrays(1, &m_VAO);
-	glDeleteBuffers(1, &m_VBO);
-	glDeleteBuffers(1, &m_IBO);
+	glDeleteVertexArrays(1, m_VAO);
+	glDeleteBuffers(1, m_VBO);
 	glDeleteShader(m_Shader->GetRendererID());
 }
 
@@ -82,10 +72,15 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// draw our first triangle
 	glUseProgram(m_Shader->GetRendererID());
-	glBindVertexArray(m_VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+	
+	// draw triangle01
+	glBindVertexArray(m_VAO[0]); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	// draw triangle02
+	glBindVertexArray(m_VAO[1]);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
 	glBindVertexArray(0);
 }
 

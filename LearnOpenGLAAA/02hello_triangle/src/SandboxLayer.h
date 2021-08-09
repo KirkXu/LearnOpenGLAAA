@@ -17,5 +17,5 @@ public:
 private:
 	GLCore::Utils::Shader* m_Shader;
 
-	GLuint m_VAO, m_VBO, m_IBO;
+	GLuint m_VAO[2], m_VBO[2], m_IBO;
 };
