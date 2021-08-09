@@ -27,11 +27,16 @@ void SandboxLayer::OnAttach()
 		 0.5f,  0.5f, 0.0f,  // top right
 		 0.5f, -0.5f, 0.0f,  // bottom right
 		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+		-0.5f,  0.5f, 0.0f,   // top left 
+		 0.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
 	};
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,  // first Triangle
-		1, 2, 3   // second Triangle
+		1, 2, 3,  // second Triangle
+		1, 5, 4,  // third Triangle
+		4, 6, 2   // fourth Triangle
 	};
 
 	glGenVertexArrays(1, &m_VAO);
@@ -80,7 +85,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	// draw our first triangle
 	glUseProgram(m_Shader->GetRendererID());
 	glBindVertexArray(m_VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
