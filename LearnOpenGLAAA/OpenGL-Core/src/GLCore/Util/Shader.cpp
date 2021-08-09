@@ -64,6 +64,11 @@ namespace GLCore::Utils {
 		shader->LoadFromGLSLTextFiles(vertexShaderPath, fragmentShaderPath);
 		return shader;
 	}
+
+	void Shader::use() const
+	{
+		glUseProgram(m_RendererID);
+	}
 	
 	void Shader::LoadFromGLSLTextFiles(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 	{
@@ -105,6 +110,19 @@ namespace GLCore::Utils {
 		glDeleteShader(fragmentShader);
 
 		m_RendererID = program;
+	}
+
+	void Shader::setBool(const std::string& name, bool value) const
+	{
+		glUniform1i(glGetUniformLocation(m_RendererID, name.c_str()), (int)value);
+	}
+	void Shader::setInt(const std::string& name, int value) const
+	{
+		glUniform1i(glGetUniformLocation(m_RendererID, name.c_str()), value);
+	}
+	void Shader::setFloat(const std::string& name, float value) const
+	{
+		glUniform1f(glGetUniformLocation(m_RendererID, name.c_str()), value);
 	}
 
 }
