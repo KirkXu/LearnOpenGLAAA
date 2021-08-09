@@ -18,4 +18,5 @@ private:
 	std::vector<GLCore::Utils::Shader*> m_Shader;
 
 	GLuint m_VAO, m_VBO, m_IBO, m_Texture[2];
+	float m_mixF=0.2;
 };

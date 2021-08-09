@@ -26,10 +26,10 @@ void SandboxLayer::OnAttach()
 	// ------------------------------------------------------------------
 	float triangle[] = {
 		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   0.55f, 0.55f, // top right
-		 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   0.55f, 0.45f, // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.45f, 0.45f, // bottom left
-		-0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,   0.45f, 0.55f  // top left 
+		 0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		 0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		-0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 	};
 
 	unsigned int indices[] = {
@@ -70,8 +70,8 @@ void SandboxLayer::OnAttach()
 	glGenTextures(2, m_Texture);
 	glBindTexture(GL_TEXTURE_2D, m_Texture[0]); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	// set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -127,6 +127,16 @@ void SandboxLayer::OnDetach()
 void SandboxLayer::OnEvent(Event& event)
 {
 	// Events here
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<KeyPressedEvent>(
+		[&](KeyPressedEvent& e)
+		{
+			if(e.GetKeyCode()==265)
+				m_mixF += 0.1;
+			if (e.GetKeyCode() == 264)
+				m_mixF -= 0.1;
+			return false;
+		});
 }
 
 void SandboxLayer::OnUpdate(Timestep ts)
@@ -144,6 +154,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	m_Shader[0]->use();
 	m_Shader[0]->setInt("texture1", 0);
 	m_Shader[0]->setInt("texture2", 1);
+	m_Shader[0]->setFloat("mixF", m_mixF);
 	// draw triangle
 	glBindVertexArray(m_VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
