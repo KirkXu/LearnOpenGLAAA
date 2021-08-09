@@ -15,7 +15,7 @@ public:
 	virtual void OnUpdate(GLCore::Timestep ts) override;
 	virtual void OnImGuiRender() override;
 private:
-	GLCore::Utils::Shader* m_Shader;
+	std::vector<GLCore::Utils::Shader*> m_Shader;
 
 	GLuint m_VAO[2], m_VBO[2], m_IBO;
 };

@@ -16,10 +16,14 @@ void SandboxLayer::OnAttach()
 	EnableGLDebugging();
 
 	// Init here
-	m_Shader = Shader::FromGLSLTextFiles(
+	m_Shader.push_back(Shader::FromGLSLTextFiles(
 		"assets/shaders/vs.vert.glsl",
-		"assets/shaders/fs.frag.glsl"
-	);
+		"assets/shaders/fs01.frag.glsl"
+	));
+	m_Shader.push_back(Shader::FromGLSLTextFiles(
+		"assets/shaders/vs.vert.glsl",
+		"assets/shaders/fs02.frag.glsl"
+	));
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -58,7 +62,10 @@ void SandboxLayer::OnDetach()
 	// Shutdown here
 	glDeleteVertexArrays(1, m_VAO);
 	glDeleteBuffers(1, m_VBO);
-	glDeleteShader(m_Shader->GetRendererID());
+	for (auto m : m_Shader)
+	{
+		glDeleteShader(m->GetRendererID());
+	}
 }
 
 void SandboxLayer::OnEvent(Event& event)
@@ -72,12 +79,12 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glUseProgram(m_Shader->GetRendererID());
-	
 	// draw triangle01
+	glUseProgram(m_Shader[0]->GetRendererID());
 	glBindVertexArray(m_VAO[0]); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	// draw triangle02
+	glUseProgram(m_Shader[1]->GetRendererID());
 	glBindVertexArray(m_VAO[1]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
