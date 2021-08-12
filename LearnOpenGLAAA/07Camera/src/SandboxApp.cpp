@@ -7,7 +7,7 @@ class Sandbox : public Application
 {
 public:
 	Sandbox()
-		: Application("Coordinate Systems", 800, 600)
+		: Application("Camera", 800, 600)
 	{
 		PushLayer(new SandboxLayer());
 	}
