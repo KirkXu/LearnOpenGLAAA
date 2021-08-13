@@ -18,8 +18,8 @@ void SandboxLayer::OnAttach()
 	EnableGLDebugging();
 	// Init here
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
-		"assets/shaders/9.1.basic_lighting.vs.glsl",
-		"assets/shaders/9.1.basic_lighting.fs.glsl"
+		"assets/shaders/9.1.Gouraud.vs.glsl",
+		"assets/shaders/9.1.Gouraud.fs.glsl"
 	));
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
 		"assets/shaders/8.1.light_cube.vs.glsl",
