@@ -50,5 +50,6 @@ private:
 
 	std::shared_ptr<GLCore::Utils::Texture> m_ContainerTex;
 	std::shared_ptr<GLCore::Utils::Texture> m_ContainerSpecTex;
+	std::shared_ptr<GLCore::Utils::Texture> m_EmissiveTex;
 
 };

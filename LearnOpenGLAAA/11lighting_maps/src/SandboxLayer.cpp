@@ -35,9 +35,13 @@ void SandboxLayer::OnAttach()
 	m_ContainerSpecTex = std::make_shared<GLCore::Utils::Texture>();
 	m_ContainerSpecTex->loadTexture("assets/textures/container2_specular.png");
 
+	m_EmissiveTex = std::make_shared<GLCore::Utils::Texture>();
+	m_EmissiveTex->loadTexture("assets/textures/matrix.jpg");
+
 	m_Shader[0]->use();
 	m_Shader[0]->setInt("material.diffuse", 0);
 	m_Shader[0]->setInt("material.specular", 1);
+	m_Shader[0]->setInt("material.emissive", 2);
 
 	
 	// set up vertex data (and buffer(s)) and configure vertex attributes
@@ -183,7 +187,7 @@ void SandboxLayer::OnEvent(Event& event)
 void SandboxLayer::OnUpdate(Timestep ts)
 {
 	// Render here
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//LOG_INFO(m_Container01Tex->GetRendererID());
 
@@ -197,6 +201,9 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glBindTexture(GL_TEXTURE_2D, m_ContainerTex->GetRendererID());
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_ContainerSpecTex->GetRendererID());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, m_EmissiveTex->GetRendererID());
+
 	// get matrix's uniform location and set matrix
 	m_Shader[0]->use();
 	m_Shader[0]->setVec3("material.ambient", 0.0215, 0.1745, 0.0215);
