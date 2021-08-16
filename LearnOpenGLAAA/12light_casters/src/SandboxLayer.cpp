@@ -259,19 +259,19 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	
 	
 
-	// draw the lamp object
-	m_Shader[1]->use();
-	model = glm::mat4(1.0f);
-	model = glm::translate(model, m_LightPos);
-	model = glm::scale(model, glm::vec3(0.2f));
-	m_Shader[1]->setMat4("model", model);
-	m_Shader[1]->setMat4("view", view);
-	m_Shader[1]->setMat4("projection", projection);
+	//// draw the lamp object
+	//m_Shader[1]->use();
+	//model = glm::mat4(1.0f);
+	//model = glm::translate(model, m_LightPos);
+	//model = glm::scale(model, glm::vec3(0.2f));
+	//m_Shader[1]->setMat4("model", model);
+	//m_Shader[1]->setMat4("view", view);
+	//m_Shader[1]->setMat4("projection", projection);
 
-	m_Shader[1]->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	//m_Shader[1]->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
-	glBindVertexArray(m_LightCubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	//glBindVertexArray(m_LightCubeVAO);
+	//glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void SandboxLayer::OnImGuiRender()
