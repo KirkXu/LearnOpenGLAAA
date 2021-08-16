@@ -19,8 +19,8 @@ void SandboxLayer::OnAttach()
 	EnableGLDebugging();
 	// Init here
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
-		"assets/shaders/12.2.light_casters.vs.glsl",
-		"assets/shaders/12.2.light_casters.fs.glsl"
+		"assets/shaders/12.3.light_casters.vs.glsl",
+		"assets/shaders/12.3.light_casters.fs.glsl"
 	));
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
 		"assets/shaders/8.1.light_cube.vs.glsl",
@@ -207,7 +207,6 @@ void SandboxLayer::OnUpdate(Timestep ts)
 
 	// get matrix's uniform location and set matrix
 	m_Shader[0]->use();
-	m_Shader[0]->setVec3("material.ambient", 0.0215, 0.1745, 0.0215);
 	m_Shader[0]->setFloat("material.shininess", m_Shininess);
 
 	/*glm::vec3 lightColor;
@@ -220,9 +219,12 @@ void SandboxLayer::OnUpdate(Timestep ts)
 
 	m_Shader[0]->setVec3("light.position", m_LightPos);
 	m_Shader[0]->setVec3("viewPos", m_Camera.m_Position);
+	m_Shader[0]->setVec3("light.direction", m_Camera.m_Front);
+	m_Shader[0]->setFloat("light.cutOff", glm::cos(glm::radians(m_Cutoff)));
+	m_Shader[0]->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-	m_Shader[0]->setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
-	m_Shader[0]->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+	m_Shader[0]->setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
+	m_Shader[0]->setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
 	m_Shader[0]->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 	m_Shader[0]->setFloat("light.constant", 1.0f);
@@ -291,6 +293,10 @@ void SandboxLayer::OnImGuiRender()
 	ImGui::Text(" ");
 	ImGui::Text("Shininess");
 	ImGui::SliderFloat("Shininess: ", &m_Shininess, 0.0f, 512.0f);
+
+	ImGui::Text(" ");
+	ImGui::Text("m_Cutoff");
+	ImGui::SliderFloat("m_Cutoff: ", &m_Cutoff, 0.0f, 512.0f);
 
 	ImGui::Text(" ");
 	ImGui::Text("lightPos: ");
