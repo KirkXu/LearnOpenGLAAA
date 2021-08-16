@@ -19,8 +19,8 @@ void SandboxLayer::OnAttach()
 	EnableGLDebugging();
 	// Init here
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
-		"assets/shaders/12.1.light_casters.vs.glsl",
-		"assets/shaders/12.1.light_casters.fs.glsl"
+		"assets/shaders/12.2.light_casters.vs.glsl",
+		"assets/shaders/12.2.light_casters.fs.glsl"
 	));
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
 		"assets/shaders/8.1.light_cube.vs.glsl",
@@ -218,13 +218,17 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
 	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);*/
 
-	m_Shader[0]->setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+	m_Shader[0]->setVec3("light.position", m_LightPos);
 	m_Shader[0]->setVec3("viewPos", m_Camera.m_Position);
+
 	m_Shader[0]->setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
 	m_Shader[0]->setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
 	m_Shader[0]->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-	m_Shader[0]->setVec3("lightPos", m_LightPos);
+	m_Shader[0]->setFloat("light.constant", 1.0f);
+	m_Shader[0]->setFloat("light.linear", 0.09f);
+	m_Shader[0]->setFloat("light.quadratic", 0.032f);
+
 	
 	// create transformations
 	glm::mat4 model      = glm::mat4(1.0f);
@@ -253,19 +257,19 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	
 	
 
-	//// draw the lamp object
-	//m_Shader[1]->use();
-	//model = glm::mat4(1.0f);
-	//model = glm::translate(model, m_LightPos);
-	//model = glm::scale(model, glm::vec3(0.2f));
-	//m_Shader[1]->setMat4("model", model);
-	//m_Shader[1]->setMat4("view", view);
-	//m_Shader[1]->setMat4("projection", projection);
+	// draw the lamp object
+	m_Shader[1]->use();
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, m_LightPos);
+	model = glm::scale(model, glm::vec3(0.2f));
+	m_Shader[1]->setMat4("model", model);
+	m_Shader[1]->setMat4("view", view);
+	m_Shader[1]->setMat4("projection", projection);
 
-	//m_Shader[1]->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	m_Shader[1]->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
-	//glBindVertexArray(m_LightCubeVAO);
-	//glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(m_LightCubeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void SandboxLayer::OnImGuiRender()
