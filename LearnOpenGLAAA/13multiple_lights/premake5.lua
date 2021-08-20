@@ -1,4 +1,5 @@
 project "13multiple_lights"
+	nuget {"assimp:3.0.0"}
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

@@ -8,3 +8,4 @@
 #include "GLCore/Util/OpenGLDebug.h"
 #include "GLCore/Util/FPSCamera.h"
 #include "GLCore/Util/Texture.h"
+#include "GLCore/Util/Model.h"

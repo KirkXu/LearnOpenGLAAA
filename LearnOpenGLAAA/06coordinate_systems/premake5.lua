@@ -1,4 +1,5 @@
 project "06coordinate_systems"
+	nuget {"assimp:3.0.0"}
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

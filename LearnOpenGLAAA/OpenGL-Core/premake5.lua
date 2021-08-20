@@ -1,4 +1,5 @@
 project "OpenGL-Core"
+	nuget {"assimp:3.0.0"}
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"

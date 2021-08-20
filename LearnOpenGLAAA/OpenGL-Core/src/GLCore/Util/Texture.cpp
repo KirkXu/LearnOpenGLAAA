@@ -8,7 +8,6 @@ namespace GLCore::Utils {
 
 	void Texture::loadTexture(char const * path)
 	{
-
         glGenTextures(1, &m_RendererID);
 
         int width, height, nrComponents;
