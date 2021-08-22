@@ -20,7 +20,7 @@ void SandboxLayer::OnAttach()
 	// Init here
 	m_Shader.push_back(Shader::FromGLSLTextFiles(
 		"assets/shaders/17.1.blending_discard.vs.glsl",
-		"assets/shaders/17.1.blending_discard.fs.glsl"
+		"assets/shaders/17.2.blending_discard.fs.glsl"
 	));
 
 
@@ -33,7 +33,7 @@ void SandboxLayer::OnAttach()
 	m_FloorTex->loadTexture("assets/textures/metal.png");
 
 	m_TransparentTex = std::make_shared<GLCore::Utils::Texture>();
-	m_TransparentTex->loadTexture("assets/textures/grass.png");
+	m_TransparentTex->loadTexture("assets/textures/window.png");
 
 	m_Shader[0]->use();
 	m_Shader[0]->setInt("texture1", 0);
@@ -140,7 +140,8 @@ void SandboxLayer::OnAttach()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glBindVertexArray(0);
 
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 }
@@ -211,6 +212,13 @@ void SandboxLayer::OnEvent(Event& event)
 
 void SandboxLayer::OnUpdate(Timestep ts)
 {
+	std::map<float, glm::vec3> sorted;
+	for (unsigned int i = 0; i < m_Windows.size(); i++)
+	{
+		float distance = glm::length(m_Camera.m_Position - m_Windows[i]);
+		sorted[distance] = m_Windows[i];
+	}
+
 	// Render here
 	glClearColor(m_BackColor.x, m_BackColor.y, m_BackColor.z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -259,10 +267,10 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glBindVertexArray(m_TransparentVAO);
 	glBindTexture(GL_TEXTURE_2D, m_TransparentTex->GetRendererID());
 	m_Shader[0]->setFloat("transFactor", m_TransFactor);
-	for (unsigned int i = 0; i < vegetation.size(); i++)
+	for (auto it = sorted.rbegin(); it != sorted.rend(); ++it)
 	{
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, vegetation[i]);
+		model = glm::translate(model, it->second);
 		m_Shader[0]->setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
@@ -284,10 +292,6 @@ void SandboxLayer::OnImGuiRender()
 	ImGui::Text("x: %.1f", m_Camera.m_Position.x);
 	ImGui::Text("y: %.1f", m_Camera.m_Position.y);
 	ImGui::Text("z: %.1f", m_Camera.m_Position.z);
-
-	ImGui::Text(" ");
-	ImGui::SliderFloat("TransFactor:", &m_TransFactor, 0.0f, 1.0f);
-
 
 	ImGui::End();
 }
